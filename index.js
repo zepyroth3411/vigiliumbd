@@ -37,13 +37,17 @@ setInterval(() => {
 }, 5 * 60 * 1000);
 
 // 🛡️ CORS configurado con origen permitido
+const cors = require("cors");
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: process.env.FRONTEND_URL || "*",  // permite tu frontend o todo durante pruebas
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"]
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));  // Responde a las peticiones OPTIONS
 app.use(express.json());
 
 // 📦 Rutas del backend
