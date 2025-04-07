@@ -1,0 +1,15 @@
+[
+    {
+      "id_usuario": "admin01",
+      "nombre": "Administrador",
+      "password": "123456",
+      "rol": "admin"
+    },
+    {
+      "id_usuario": "monitor01",
+      "nombre": "Usuario Monitor",
+      "password": "123456",
+      "rol": "monitorista"
+    }
+  ]
+  
