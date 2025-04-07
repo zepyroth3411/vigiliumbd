@@ -29,11 +29,11 @@ app.set('io',io)
 
 const PORT = process.env.PORT || 4000
 
-// Ejecutar cada minuto
+// Ejecutar cada cinco
 setInterval(() => {
-  console.log('⏱️ Ejecutando verificación de conexión...')
+  console.log('⏱️ Verificando conexiones de dispositivos...')
   verificarDispositivosConectados()
-}, 60 * 1000) // cada 60 segundos
+}, 5 * 60 * 1000) // cada 5 minutos
 
 // Middlewares
 app.use(cors())

@@ -1,20 +1,35 @@
-// backend/db.js
 const mysql = require('mysql2')
+require('dotenv').config()
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
-})
+function verificarDispositivosConectados() {
+  const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT || 3306
+  })
 
-connection.connect((err) => {
-  if (err) {
-    console.error('❌ Error al conectar con Railway:', err)
-  } else {
-    console.log('✅ Conectado a la base de datos Railway')
-  }
-})
+  const sql = `
+    UPDATE dispositivos d
+    LEFT JOIN (
+      SELECT id_dispositivo, MAX(fecha_hora) AS ultima_fecha
+      FROM eventos
+      GROUP BY id_dispositivo
+    ) e ON d.id_dispositivo = e.id_dispositivo
+    SET d.estado = 'desconectado'
+    WHERE TIMESTAMPDIFF(MINUTE, e.ultima_fecha, NOW()) > 3
+      OR e.ultima_fecha IS NULL
+  `
 
-module.exports = connection
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.error('❌ Error actualizando estado de conexión:', err)
+    } else {
+      console.log(`🔄 Dispositivos actualizados: ${result.affectedRows}`)
+    }
+    connection.end() // <-- 👈 ¡Cierra la conexión!
+  })
+}
+
+module.exports = verificarDispositivosConectados
