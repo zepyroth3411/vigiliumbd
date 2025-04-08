@@ -28,7 +28,7 @@ const io = new Server(server, {
 
 app.set('io', io);
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 
 // 🔁 Ejecutar verificación de conexión cada 5 minutos
 setInterval(() => {
